@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart'; // Import the intl package
 
 class Viewalerts extends StatefulWidget {
-  const Viewalerts({Key? key}) : super(key: key);
+  const Viewalerts({super.key});
 
   @override
   State<Viewalerts> createState() => _Viewalertstate();
@@ -21,6 +21,7 @@ class _Viewalertstate extends State<Viewalerts> {
 
   Future<void> fetchAlerts() async {
     try {
+      print('started');
       final user = FirebaseAuth.instance.currentUser;
       final userId = user?.uid;
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -30,6 +31,7 @@ class _Viewalertstate extends State<Viewalerts> {
               .limit(1)
               .get();
       if (querySnapshot.docs.isNotEmpty) {
+      print('user');
         String sid = querySnapshot.docs.first.id;
         QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
             .instance
@@ -39,6 +41,7 @@ class _Viewalertstate extends State<Viewalerts> {
             .get();
 
         if (snapshot.docs.isNotEmpty) {
+      print('stop');
           String stopId = snapshot.docs.first['stop_id'];
           DocumentSnapshot<Map<String, dynamic>> snapshot1 =
               await FirebaseFirestore.instance
@@ -47,6 +50,7 @@ class _Viewalertstate extends State<Viewalerts> {
                   .get();
 
           if (snapshot1.exists) {
+      print('route');
             String routeId = snapshot1.data()?['route_id'];
             QuerySnapshot<Map<String, dynamic>> snapshot =
                 await FirebaseFirestore.instance
@@ -55,6 +59,7 @@ class _Viewalertstate extends State<Viewalerts> {
                     .get();
 
             if (snapshot.docs.isNotEmpty) {
+      print('alert');
               List<Map<String, dynamic>> alertsList = [];
               for (QueryDocumentSnapshot<Map<String, dynamic>> doc
                   in snapshot.docs) {
@@ -65,6 +70,7 @@ class _Viewalertstate extends State<Viewalerts> {
                     .toString();
                 alertData['alert_datetime'] = alertDatetime;
                 alertsList.add(alertData);
+                print('Alerts: $alertsList');
               }
               setState(() {
                 alerts = alertsList;

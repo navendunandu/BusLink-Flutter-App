@@ -1,0 +1,20 @@
+Future<void> fetchCourse(String id) async {
+     try {
+       selectcourse = null;
+       QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+           .collection('tbl_course')
+           .where('dep_id', isEqualTo: id)
+           .get();
+       List<Map<String, dynamic>> c1 = querySnapshot.docs
+           .map((doc) => {
+                 'id': doc.id,
+                 'course': doc['course_name'].toString(),
+               })
+           .toList();
+       setState(() {
+         course = c1;
+       });
+     } catch (e) {
+       print(e);
+     }
+   }

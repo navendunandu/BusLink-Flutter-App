@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Editprofile extends StatefulWidget {
-  const Editprofile({super.key});
+  const Editprofile({Key? key}) : super(key: key);
 
   @override
   State<Editprofile> createState() => EditprofileState();
@@ -29,16 +29,16 @@ class EditprofileState extends State<Editprofile> {
       if (userId != null) {
         QuerySnapshot<Map<String, dynamic>> querySnapshot =
             await FirebaseFirestore.instance
-                .collection('tbl_userregistration')
-                .where('User_id', isEqualTo: userId)
+                .collection('tbl_student')
+                .where('stu_id', isEqualTo: userId)
                 .limit(1)
                 .get();
         if (querySnapshot.docs.isNotEmpty) {
           final doc = querySnapshot.docs.first;
           setState(() {
-            _nameController.text = doc['user_name'] ?? '';
-            _contactController.text = doc['user_contact'] ?? '';
-            _addressController.text = doc['user_address'] ?? '';
+            _nameController.text = doc['stu_name'] ?? '';
+            _contactController.text = doc['stucon'] ?? '';
+            _addressController.text = doc['stu_house'] ?? '';
             _isLoading = false;
           });
         } else {
@@ -69,19 +69,19 @@ class EditprofileState extends State<Editprofile> {
       if (userId != null) {
         try {
           await FirebaseFirestore.instance
-              .collection('tbl_userregistration')
-              .where('User_id', isEqualTo: userId)
+              .collection('tbl_student')
+              .where('stu_id', isEqualTo: userId)
               .get()
               .then((querySnapshot) {
             if (querySnapshot.docs.isNotEmpty) {
               final docId = querySnapshot.docs.first.id;
               FirebaseFirestore.instance
-                  .collection('tbl_userregistration')
+                  .collection('tbl_student')
                   .doc(docId)
                   .update({
-                'user_name': _nameController.text,
-                'user_contact': _contactController.text,
-                'user_address': _addressController.text,
+                'stu_name': _nameController.text,
+                'stucon': _contactController.text,
+                'stu_house': _addressController.text,
               });
               showSuccessDialog('Profile updated successfully');
             }
@@ -130,20 +130,38 @@ class EditprofileState extends State<Editprofile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 60, 60, 231),
+        title: const Text(
+          'Edit Profile',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SafeArea(
-            child: Padding(
+              child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('User editprofile'),
+                      const Text(
+                        'Edit Your Profile',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _nameController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Enter Name',
+                          border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -152,24 +170,26 @@ class EditprofileState extends State<Editprofile> {
                           return null;
                         },
                       ),
-                      
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _contactController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Enter Contact',
+                          border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter your contact';
                           }
-                          // Add additional contact validation if needed
                           return null;
                         },
                       ),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _addressController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Enter Address',
+                          border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -178,6 +198,7 @@ class EditprofileState extends State<Editprofile> {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: editProfile,
                         child: const Text('Save'),
@@ -186,7 +207,7 @@ class EditprofileState extends State<Editprofile> {
                   ),
                 ),
               ),
-          ),
+            ),
     );
   }
 }

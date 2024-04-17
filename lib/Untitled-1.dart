@@ -213,25 +213,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> fetchCourse(String id) async {
-     try {
-       selectcourse = null;
-       QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
-           .collection('tbl_course')
-           .where('dep_id', isEqualTo: id)
-           .get();
-       List<Map<String, dynamic>> c1 = querySnapshot.docs
-           .map((doc) => {
-                 'id': doc.id,
-                 'course': doc['course_name'].toString(),
-               })
-           .toList();
-       setState(() {
-         course = c1;
-       });
-     } catch (e) {
-       print(e);
-     }
-   }
+    try {
+      selectcourse = null;
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await db
+          .collection('tbl_course')
+          .where('dep_id', isEqualTo: id)
+          .get();
+      List<Map<String, dynamic>> c1 = querySnapshot.docs
+          .map((doc) => {
+            
+                'id': doc.id,
+                'course': doc['course_name'].toString(),
+              })
+          .toList();
+          
+      setState(() {
+        print(course);
+        course = c1;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
 
 
@@ -786,7 +789,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onChanged: (String? newValue) {
                           setState(() {
                             selectdep = newValue!;
-                            // fetchCourse(newValue);
+                            print(newValue);
+                            fetchCourse(newValue);
                           });
                         },
                         isExpanded: true,
@@ -800,10 +804,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ).toList(),
                       ),
 
-           const SizedBox(
-                        height: 20,
-                      ),
-                      DropdownButtonFormField<String>(
+  DropdownButtonFormField<String>(
                         value: selectcourse,
                         decoration: InputDecoration(
                           label: const Text('Course'),
@@ -830,7 +831,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
                         },
                         isExpanded: true,
-                        items: course.map<DropdownMenuItem<String>>(
+                        items: place.map<DropdownMenuItem<String>>(
                           (Map<String, dynamic> course) {
                             return DropdownMenuItem<String>(
                               value: course['id'],
@@ -839,7 +840,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ).toList(),
                       ),
-
 
 
                 Column(

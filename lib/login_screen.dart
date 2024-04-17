@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'stuhomescreen.dart';
+import 'forgotpassword.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -137,9 +138,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        onPressed: () {
-                          // Add logic for "Forgot Password" here
-                        },
+                       onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ForgotPassword(title: 'Forgot Password'), // Instantiate the widget correctly
+    ),
+  );
+},
                         child: const Text(
                           'Forgot Password?',
                           style: TextStyle(
@@ -147,27 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              value: false, // Set your own value here
-                              onChanged: (value) {
-                                // Add logic for "Remember Me" here
-                              },
-                              checkColor: Color.fromARGB(255, 70, 144, 152),
-                              activeColor: Color.fromARGB(255, 70, 144, 152),
-                            ),
-                            const Text(
-                              'Remember Me',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 70, 144, 152),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                     
                     ],
                   ),
                 ),
